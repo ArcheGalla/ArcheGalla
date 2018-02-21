@@ -15,17 +15,24 @@ module.exports = {
     },
 
     module: {
-        rules: [{
-            test: /\.ico$/,
-            use: [
-                {
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]'
+        rules: [
+            {
+                test: /\.ico$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]'
+                        }
                     }
-                }
-            ]
-        }]
+                ]
+            },
+            {
+                test: /\.(js|mjs)$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
+            }
+        ]
     },
 
     resolve: {
@@ -47,7 +54,7 @@ module.exports = {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
         historyApiFallback: true,
-        hot: true,
+        // hot: true,
     },
 
     plugins: [
