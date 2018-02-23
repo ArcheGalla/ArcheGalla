@@ -21,9 +21,7 @@ module.exports = {
                 use: [
                     {
                         loader: 'file-loader',
-                        options: {
-                            name: '[name].[ext]'
-                        }
+                        options: {name: '[name].[ext]'}
                     }
                 ]
             },
@@ -36,10 +34,7 @@ module.exports = {
     },
 
     resolve: {
-        modules: [
-            "node_modules",
-            path.resolve(__dirname, "app")
-        ],
+        modules: ["node_modules", path.join(__dirname, "app", "components")],
         extensions: [".js", ".json", ".css"]
     },
 
@@ -50,18 +45,25 @@ module.exports = {
     stats: "errors-only",
     devServer: {
         port: 9000,
-        // proxy: { '/api': 'http://localhost:3000' },
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
-        historyApiFallback: true,
-        // hot: true,
+        historyApiFallback: true
     },
 
     plugins: [
+        new webpack.DefinePlugin({
+            NODE_ENV: process.env.NODE_ENV
+        }),
+
+        new webpack.ProvidePlugin({
+            m: 'mithril',
+        }),
+
         new HtmlWebpackPlugin({
             title: 'Arche Galla',
             filename: 'index.html'
         }),
+
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: 'defer',
             module: ['bundle']
