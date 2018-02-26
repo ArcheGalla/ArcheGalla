@@ -1,7 +1,39 @@
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
+
+const plugins = [
+    new webpack.DefinePlugin({
+        NODE_ENV: process.env.NODE_ENV
+    }),
+
+    new webpack.ProvidePlugin({
+        m: 'mithril',
+    }),
+
+    new HtmlWebpackPlugin({
+        title: 'Arche Galla',
+        filename: 'index.html'
+    }),
+
+    new ScriptExtHtmlWebpackPlugin({
+        defaultAttribute: 'defer',
+        module: ['bundle']
+    }),
+
+    new webpack.optimize.CommonsChunkPlugin({
+        name: "vendor",
+        minChunks: Infinity,
+    }),
+];
+
+if (process.env.NODE_ENV !== 'development') {
+    plugins.push(new UglifyJsPlugin({
+        sourceMap: true,
+    }));
+}
 
 module.exports = {
     entry: {
@@ -50,28 +82,5 @@ module.exports = {
         historyApiFallback: true
     },
 
-    plugins: [
-        new webpack.DefinePlugin({
-            NODE_ENV: process.env.NODE_ENV
-        }),
-
-        new webpack.ProvidePlugin({
-            m: 'mithril',
-        }),
-
-        new HtmlWebpackPlugin({
-            title: 'Arche Galla',
-            filename: 'index.html'
-        }),
-
-        new ScriptExtHtmlWebpackPlugin({
-            defaultAttribute: 'defer',
-            module: ['bundle']
-        }),
-
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            minChunks: Infinity,
-        })
-    ]
+    plugins,
 };
