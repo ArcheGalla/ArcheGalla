@@ -1,12 +1,17 @@
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 
+const production = 'production';
+const development = 'development';
+const NODE_ENV = process.env.NODE_ENV;
+
 const plugins = [
     new webpack.DefinePlugin({
-        NODE_ENV: process.env.NODE_ENV
+        NODE_ENV: NODE_ENV === development ? "'development'" : "'production'"
     }),
 
     new webpack.ProvidePlugin({
@@ -29,55 +34,79 @@ const plugins = [
     }),
 ];
 
-if (process.env.NODE_ENV !== 'development') {
+const rules = [
+    {
+        test: /\.ico$/,
+        use: [
+            {
+                loader: 'file-loader',
+                options: {name: '[name].[ext]'}
+            }
+        ]
+    },
+    {
+        test: /\.(js|mjs)$/,
+        exclude: /(node_modules(?!\/rxjs))/,
+        loader: 'babel-loader'
+    }
+];
+
+
+if (NODE_ENV === production) {
     plugins.push(new UglifyJsPlugin({
         sourceMap: true,
     }));
+
+    plugins.push(
+        new ExtractTextPlugin({
+            filename: "[name].[hash].css",
+            allChunks: true,
+        })
+    );
+
+
+    rules.push({
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: "css-loader"
+        })
+    });
 }
+
+if (NODE_ENV === development) {
+    rules.push({
+        test: /\.css$/,
+        use: [
+            {
+                loader: 'style-loader',
+            },
+            {
+                loader: 'css-loader',
+            }
+        ]
+    });
+}
+
 
 module.exports = {
     entry: {
         app: './src/app/index.bootstrap.mjs',
         vendor: './src/app/index.vendor.mjs'
     },
+
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "[name].js",
+        filename: "[name].[hash].js",
         publicPath: "/",
     },
 
-    module: {
-        rules: [
-            {
-                test: /\.ico$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {name: '[name].[ext]'}
-                    }
-                ]
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                    }
-                ]
-            },
-            {
-                test: /\.(js|mjs)$/,
-                exclude: /(node_modules(?!\/rxjs))/,
-                loader: 'babel-loader'
-            }
-        ]
-    },
+    module: {rules},
+
+    plugins,
 
     resolve: {
-        modules: ["node_modules", path.join(__dirname, "app", "components")],
+        modules: ["node_modules", path.join(__dirname, "src", "app", "components")],
         extensions: [".js", ".json", ".css"]
     },
 
@@ -92,6 +121,4 @@ module.exports = {
         compress: true,
         historyApiFallback: true
     },
-
-    plugins,
 };
