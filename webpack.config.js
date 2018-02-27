@@ -45,7 +45,7 @@ const rules = [
         ]
     },
     {
-        test: /\.(js|mjs)$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules(?!\/rxjs))/,
         loader: 'babel-loader'
     }
@@ -69,7 +69,26 @@ if (NODE_ENV === production) {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
             fallback: "style-loader",
-            use: "css-loader"
+            use: [
+                {
+                    loader: 'css-loader'
+                },
+            ]
+        })
+    });
+
+    rules.push({
+        test: /\.sss$/,
+        use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: [
+                {
+                    loader: 'css-loader'
+                },
+                {
+                    loader: 'postcss-loader'
+                }
+            ]
         })
     });
 }
@@ -83,6 +102,21 @@ if (NODE_ENV === development) {
             },
             {
                 loader: 'css-loader',
+            }
+        ]
+    });
+
+    rules.push({
+        test: /\.sss$/,
+        use: [
+            {
+                loader: 'style-loader',
+            },
+            {
+                loader: 'css-loader',
+            },
+            {
+                loader: 'postcss-loader',
             }
         ]
     });
@@ -107,7 +141,7 @@ module.exports = {
 
     resolve: {
         modules: ["node_modules", path.join(__dirname, "src", "app", "components")],
-        extensions: [".js", ".json", ".css"]
+        extensions: [".js", ".json", ".jsx", ".css"]
     },
 
     devtool: "source-map",

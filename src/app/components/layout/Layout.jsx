@@ -1,5 +1,6 @@
 import {Header} from 'header/Header';
 import {Footer} from 'footer/Footer';
+import './Layout.sss';
 
 export class Layout {
     view() {
