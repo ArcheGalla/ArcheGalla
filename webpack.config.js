@@ -58,8 +58,19 @@ module.exports = {
                 ]
             },
             {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: 'style-loader',
+                    },
+                    {
+                        loader: 'css-loader',
+                    }
+                ]
+            },
+            {
                 test: /\.(js|mjs)$/,
-                exclude: /node_modules/,
+                exclude: /(node_modules(?!\/rxjs))/,
                 loader: 'babel-loader'
             }
         ]
