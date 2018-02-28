@@ -1,26 +1,11 @@
-// import { Header } from "../../components/header/Header";
-// import { Footer } from "../../components/footer/Footer";
-
-// export class Home {
-//     view(){
-//         return(
-//             <div>
-//                 <Header></Header>
-//                 <section>Welcome to home page</section>
-//                 <section><a href="#!/portfolio">portfolio</a></section>
-//                 <Footer></Footer>
-//             </div>
-//         )
-//     }
-// }
 import {Layout} from 'layout/Layout';
 
 export class Home {
     view(){
-        return(
-            <div>
-               <Layout></Layout>
-            </div>
-        )
+        return (
+			<Layout>
+				<h2>Hello thia is home page. <a href="#!/portfolio">portfolio</a></h2>
+			</Layout>
+    	)
     }
 }

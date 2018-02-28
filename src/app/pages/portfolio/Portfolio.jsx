@@ -1,15 +1,12 @@
-import { Header } from "../../components/header/Header";
-import { Footer } from "../../components/footer/Footer";
+import {Layout} from 'layout/Layout';
 
 export class Portfolio {
     view(){
         return(
-            <div>
-                <Header></Header>
+            <Layout>
                 <section>Hello from Portfolio !</section>
                 <section><a href="#!/home">home</a></section>
-                <Footer></Footer>
-            </div>
+            </Layout>
         );
     }
 };

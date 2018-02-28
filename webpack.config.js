@@ -141,7 +141,7 @@ module.exports = {
 
     resolve: {
         modules: ["node_modules", path.join(__dirname, "src", "app", "components")],
-        extensions: [".js", ".json", ".jsx", ".css"]
+        extensions: [".js", ".mjs", ".json", ".jsx", ".css"]
     },
 
     devtool: "source-map",

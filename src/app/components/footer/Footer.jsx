@@ -1,7 +1,9 @@
+import './Footer.sss';
+
 export class Footer {
     view(){
         return(
-            <h2>Hello from footer</h2>
+            <footer className="footer">Hello from footer</footer>
         )
     }
 };
